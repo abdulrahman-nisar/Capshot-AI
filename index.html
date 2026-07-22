@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capshot AI — Your AI Caption Generator</title>
+  <meta name="description" content="Generate perfect social media captions for any photo instantly. Capshot AI creates captions for Instagram, TikTok, LinkedIn, Facebook and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0812;
+      --bg2:       #100d1a;
+      --purple:    #7c3aed;
+      --purple-lt: #a855f7;
+      --blue:      #2563eb;
+      --blue-lt:   #60a5fa;
+      --glow:      rgba(124, 58, 237, 0.35);
+      --text:      #f1f0f5;
+      --muted:     #9490a8;
+      --card:      #16112a;
+      --border:    rgba(124,58,237,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(10,8,18,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1.25rem;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px; font-size: 0.8rem;
+      color: var(--purple-lt); margin-bottom: 32px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700; line-height: 1.08;
+      max-width: 820px; margin-bottom: 24px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--purple-lt) 0%, var(--blue-lt) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 1.15rem; color: var(--muted);
+      max-width: 520px; margin-bottom: 48px; line-height: 1.7;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: #fff; text-decoration: none;
+      padding: 15px 36px; border-radius: 100px;
+      font-weight: 600; font-size: 1rem;
+      box-shadow: 0 0 40px var(--glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 60px var(--glow);
+    }
+    .btn-primary svg { width: 20px; height: 20px; }
+
+    /* SCREENSHOTS */
+    .screenshots {
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .screenshots h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem; font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .screenshots p { color: var(--muted); margin-bottom: 48px; }
+    .screenshot-grid {
+      display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+      max-width: 1000px; margin: 0 auto;
+    }
+    .screenshot-frame {
+      width: 220px; border-radius: 32px;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,58,237,0.1);
+      background: var(--card);
+    }
+    .screenshot-frame img {
+      width: 100%; display: block;
+    }
+    .screenshot-placeholder {
+      width: 220px; height: 420px; border-radius: 32px;
+      background: var(--card);
+      border: 2px dashed var(--border);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; color: var(--muted); font-size: 0.85rem;
+    }
+    .screenshot-placeholder svg { opacity: 0.4; }
+
+    /* PLATFORMS */
+    .platforms {
+      padding: 80px 24px;
+      text-align: center;
+      background: var(--bg2);
+    }
+    .platforms h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem; font-weight: 700; margin-bottom: 12px;
+    }
+    .platforms p { color: var(--muted); margin-bottom: 48px; }
+    .platform-grid {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      justify-content: center; max-width: 600px; margin: 0 auto;
+    }
+    .platform-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 22px; font-size: 0.9rem;
+      color: var(--text); font-weight: 500;
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 80px 24px;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .features-header { text-align: center; margin-bottom: 56px; }
+    .features-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem; font-weight: 700; margin-bottom: 12px;
+    }
+    .features-header p { color: var(--muted); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; font-size: 1.4rem;
+    }
+    .feature-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;
+    }
+    .feature-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
+
+    /* STATS */
+    .stats {
+      padding: 80px 24px;
+      background: var(--bg2);
+      text-align: center;
+    }
+    .stats-grid {
+      display: flex; gap: 48px; justify-content: center;
+      flex-wrap: wrap; max-width: 700px; margin: 0 auto;
+    }
+    .stat { flex: 1; min-width: 140px; }
+    .stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.8rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-label { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+
+    /* CTA */
+    .cta-section {
+      padding: 100px 24px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700; margin-bottom: 16px;
+    }
+    .cta-section p { color: var(--muted); margin-bottom: 40px; font-size: 1.05rem; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: gap;
+      max-width: 1100px; margin: 0 auto;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .footer-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1rem;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: var(--muted); font-size: 0.82rem; }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 20px; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Capshot AI</div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#platforms">Platforms</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <circle cx="6" cy="6" r="6" fill="#a855f7"/>
+    </svg>
+    Now available on Google Play
+  </div>
+  <h1>Generate captions for <span>every platform</span> instantly</h1>
+  <p class="hero-sub">Pick any photo. Capshot AI writes perfect captions for Instagram, TikTok, LinkedIn, Facebook and 4 more — all at once, in seconds.</p>
+  <a href="https://play.google.com/store/apps/details?id=YOUR_PACKAGE_NAME" class="btn-primary" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M3.18 23.76c.35.2.74.24 1.12.1l12.73-7.35-2.82-2.82-11.03 10.07zM.3 1.05C.11 1.42 0 1.85 0 2.34v19.32c0 .49.11.92.3 1.29l.07.06 10.82-10.82v-.25L.37.99.3 1.05zM20.65 10.53l-2.66-1.54-3.17 3.17 3.17 3.17 2.68-1.55c.77-.44.77-1.81-.02-2.25zM4.3.14L17.02 7.5l-2.82 2.82L3.18.25C3.56.1 3.96.14 4.3.37V.14z"/>
+    </svg>
+    Download on Google Play
+  </a>
+</section>
+
+<!-- SCREENSHOTS -->
+<section class="screenshots" id="screenshots">
+  <h2>See it in action</h2>
+  <p>Clean, fast, and built for creators</p>
+  <div class="screenshot-grid">
+    <!-- Replace these placeholder divs with actual <img> tags once you upload screenshots -->
+    <!-- Example: <div class="screenshot-frame"><img src="screenshots/screen1.png" alt="Capshot AI home screen" /></div> -->
+    <div class="screenshot-placeholder">
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <rect x="5" y="2" width="14" height="20" rx="2" stroke-width="1.5"/>
+        <circle cx="12" cy="17" r="1" fill="currentColor"/>
+      </svg>
+      Screenshot 1
+    </div>
+    <div class="screenshot-placeholder">
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <rect x="5" y="2" width="14" height="20" rx="2" stroke-width="1.5"/>
+        <circle cx="12" cy="17" r="1" fill="currentColor"/>
+      </svg>
+      Screenshot 2
+    </div>
+    <div class="screenshot-placeholder">
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <rect x="5" y="2" width="14" height="20" rx="2" stroke-width="1.5"/>
+        <circle cx="12" cy="17" r="1" fill="currentColor"/>
+      </svg>
+      Screenshot 3
+    </div>
+    <div class="screenshot-placeholder">
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <rect x="5" y="2" width="14" height="20" rx="2" stroke-width="1.5"/>
+        <circle cx="12" cy="17" r="1" fill="currentColor"/>
+      </svg>
+      Screenshot 4
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="platforms" id="platforms">
+  <h2>One photo. Eight platforms.</h2>
+  <p>Every caption tailored to the platform it's going on</p>
+  <div class="platform-grid">
+    <span class="platform-pill">📸 Instagram</span>
+    <span class="platform-pill">👥 Facebook</span>
+    <span class="platform-pill">🐦 Twitter</span>
+    <span class="platform-pill">📌 Pinterest</span>
+    <span class="platform-pill">💼 LinkedIn</span>
+    <span class="platform-pill">🧵 Threads</span>
+    <span class="platform-pill">👻 Snapchat</span>
+    <span class="platform-pill">🎵 TikTok</span>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-header">
+    <h2>Built for speed and simplicity</h2>
+    <p>Everything you need, nothing you don't</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📸</div>
+      <h3>Pick any photo</h3>
+      <p>Upload from your gallery or take a photo directly in the app. Any image works.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <h3>AI generates instantly</h3>
+      <p>Powered by GPT-5 Nano — advanced AI that understands your image and writes captions that actually fit.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>Copy and post</h3>
+      <p>Tap any caption to copy it instantly. No editing needed — just paste and post.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>All platforms at once</h3>
+      <p>Get tailored captions for all 8 platforms in a single tap — no switching between tools.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-number">8</div>
+      <div class="stat-label">Platforms supported</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">&lt;10s</div>
+      <div class="stat-label">Caption generation time</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">0</div>
+      <div class="stat-label">Account required</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Stop writing captions manually</h2>
+  <p>Download Capshot AI and get back to creating content that matters.</p>
+  <a href="https://play.google.com/store/apps/details?id=YOUR_PACKAGE_NAME" class="btn-primary" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M3.18 23.76c.35.2.74.24 1.12.1l12.73-7.35-2.82-2.82-11.03 10.07zM.3 1.05C.11 1.42 0 1.85 0 2.34v19.32c0 .49.11.92.3 1.29l.07.06 10.82-10.82v-.25L.37.99.3 1.05zM20.65 10.53l-2.66-1.54-3.17 3.17 3.17 3.17 2.68-1.55c.77-.44.77-1.81-.02-2.25zM4.3.14L17.02 7.5l-2.82 2.82L3.18.25C3.56.1 3.96.14 4.3.37V.14z"/>
+    </svg>
+    Download Free on Google Play
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Capshot AI</div>
+  <div class="footer-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="mailto:abdulrahmannisar.dev@gmail.com">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Abdulrahman Nisar. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
