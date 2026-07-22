@@ -145,6 +145,41 @@
     }
     .screenshot-placeholder svg { opacity: 0.4; }
 
+    /* VIDEO */
+    .video-section {
+      padding: 80px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .video-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .video-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .video-header p {
+      color: var(--muted);
+    }
+    .video-card {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(22,17,42,0.95), rgba(16,13,26,0.95));
+      box-shadow: 0 12px 50px rgba(0,0,0,0.45);
+      aspect-ratio: 16 / 9;
+    }
+    .video-card iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
     /* PLATFORMS */
     .platforms {
       padding: 80px 24px;
@@ -307,14 +342,8 @@
   <h2>See it in action</h2>
   <p>Clean, fast, and built for creators</p>
   <div class="screenshot-grid">
-    <!-- Replace these placeholder divs with actual <img> tags once you upload screenshots -->
-    <!-- Example: <div class="screenshot-frame"><img src="screenshots/screen1.png" alt="Capshot AI home screen" /></div> -->
-    <div class="screenshot-placeholder">
-      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <rect x="5" y="2" width="14" height="20" rx="2" stroke-width="1.5"/>
-        <circle cx="12" cy="17" r="1" fill="currentColor"/>
-      </svg>
-      Screenshot 1
+    <div class="screenshot-frame">
+      <img src="screenshots/capai_01_all_captions.png" alt="Capshot AI app showing all generated captions" />
     </div>
     <div class="screenshot-placeholder">
       <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -337,6 +366,22 @@
       </svg>
       Screenshot 4
     </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section" id="video">
+  <div class="video-header">
+    <h2>Watch the walkthrough</h2>
+    <p>See the app in action before you install it</p>
+  </div>
+  <div class="video-card">
+    <iframe
+      src="https://www.youtube.com/embed/cEW39J9_drA"
+      title="Capshot AI walkthrough video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
   </div>
 </section>
 
